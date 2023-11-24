@@ -1,5 +1,7 @@
 using Application.Data.Account;
 using Application.Data.Database;
+using Application.Domain.Settings;
+using Application.Services.EmailServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WT.WebApplication.Infrastructure.Extentions;
@@ -39,6 +41,19 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
+builder.Services.AddAuthentication().AddCookie("temp")
+    .AddGoogle("Google", o =>
+    {
+        o.ClientId = "635672167628-qc09tqq0rhe4hlf431ivqp5g30ab1e4r.apps.googleusercontent.com";
+        o.ClientSecret = "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";
+        o.SignInScheme = "temp";
+
+    });
+
+builder.Services.Configure<SmtpSetting>(builder.Configuration.GetSection("SMTP"));
+builder.Services.Configure<ExternalGoogle>(builder.Configuration.GetSection("GoogleExtensions"));
+
+builder.Services.AddSingleton<IEmailService, EmailService>();
 
 var app = builder.Build();
 
@@ -60,6 +75,7 @@ app.UseAuthorization();
 
 
 app.MapRazorPages();
+app.MapControllers();
 
 app.RunDatabaseMigrations<ApplicationDbContext>();
 
