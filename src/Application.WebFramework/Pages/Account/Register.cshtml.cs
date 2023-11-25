@@ -60,7 +60,7 @@ namespace Application.WebFramework.Pages.Account
                     "Please confirm your email",
                     $"Please click on this link to confirm your email address: {confirmationLink}");
 
-                return RedirectToPage("/Account/Login?returnUrl=/");
+                return RedirectToPage("/Index");
             }
             else
             {

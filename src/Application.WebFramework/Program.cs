@@ -2,6 +2,7 @@ using Application.Data.Account;
 using Application.Data.Database;
 using Application.Domain.Settings;
 using Application.Services.EmailServices;
+using Application.Services.QRCode;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WT.WebApplication.Infrastructure.Extentions;
@@ -54,6 +55,7 @@ builder.Services.Configure<SmtpSetting>(builder.Configuration.GetSection("SMTP")
 builder.Services.Configure<ExternalGoogle>(builder.Configuration.GetSection("GoogleExtensions"));
 
 builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddSingleton<IQRCodeService ,QRCodeService>();
 
 var app = builder.Build();
 
