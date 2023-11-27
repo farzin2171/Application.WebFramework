@@ -6,8 +6,15 @@ using Application.Services.QRCode;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WT.WebApplication.Infrastructure.Extentions;
+using Serilog;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, loggerConfig) =>
+{
+    loggerConfig.ReadFrom.Configuration(context.Configuration).Enrich.FromLogContext();
+});
 
 builder.Services.AddRazorPages();
 
@@ -55,7 +62,9 @@ builder.Services.Configure<SmtpSetting>(builder.Configuration.GetSection("SMTP")
 builder.Services.Configure<ExternalGoogle>(builder.Configuration.GetSection("GoogleExtensions"));
 
 builder.Services.AddSingleton<IEmailService, EmailService>();
-builder.Services.AddSingleton<IQRCodeService ,QRCodeService>();
+builder.Services.AddSingleton<IQRCodeService, QRCodeService>();
+
+
 
 var app = builder.Build();
 
@@ -67,6 +76,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -74,6 +84,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSerilogRequestLogging();
 
 
 app.MapRazorPages();

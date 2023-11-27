@@ -14,7 +14,8 @@ namespace Application.WebFramework.Pages
 
         public void OnGet()
         {
-
+            _logger.LogInformation("Application Started");
+            _logger.LogError("Errrrrooo");
         }
     }
 }
